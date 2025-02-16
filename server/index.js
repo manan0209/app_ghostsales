@@ -16,6 +16,7 @@ const prisma = new PrismaClient();
 const PORT = process.env.PORT || 5000;
 
 app.use(cors());
+app.use(cors({ origin: "https://app-ghostsales.vercel.app" }));
 app.use(express.json());
 
 // Define routes
@@ -33,3 +34,4 @@ app.get('/', (req, res) => {
 });
 
 app.listen(PORT, () => console.log(`Server running on port ${PORT}`));
+
