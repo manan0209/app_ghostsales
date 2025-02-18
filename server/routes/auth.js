@@ -1,4 +1,3 @@
-// routes/auth.js
 import { Router } from "express";
 import bcrypt from "bcrypt";
 import jwt from "jsonwebtoken";
@@ -10,22 +9,39 @@ const router = Router();
 router.post("/login", async (req, res) => {
   const { empId, password } = req.body;
   if (!empId || !password) {
-    return res.status(400).json({ error: "Employee ID and password are required." });
+    return res
+      .status(400)
+      .json({ error: "Employee ID and password are required." });
   }
 
   try {
     // Find user by empId
-    const user = await prisma.user.findUnique({ where: { empId } });
+    const user = await prisma.user.findUnique({
+      where: { empId },
+    });
+
     if (!user) return res.status(400).json({ error: "Invalid credentials." });
 
     // Compare password
     const validPassword = await bcrypt.compare(password, user.password);
-    if (!validPassword) return res.status(400).json({ error: "Invalid credentials." });
+    if (!validPassword)
+      return res.status(400).json({ error: "Invalid credentials." });
 
-    // Create JWT
-    const token = jwt.sign({ userId: user.id }, process.env.JWT_SECRET, {
-      expiresIn: "1d",
+    // Update lastLogin and set onlineStatus to true
+    const updatedUser = await prisma.user.update({
+      where: { id: user.id },
+      data: {
+        lastLogin: new Date(),
+        onlineStatus: true,
+      },
     });
+
+    // Create JWT with tenant ID for multi-tenancy
+    const token = jwt.sign(
+      { userId: user.id, companyId: user.companyId },
+      process.env.JWT_SECRET,
+      { expiresIn: "1d" }
+    );
 
     return res.json({
       token,
@@ -35,6 +51,8 @@ router.post("/login", async (req, res) => {
         email: user.email,
         role: user.role,
         companyId: user.companyId,
+        lastLogin: updatedUser.lastLogin, // Include last login timestamp
+        onlineStatus: updatedUser.onlineStatus, // Include online status
       },
     });
   } catch (error) {
@@ -43,10 +61,45 @@ router.post("/login", async (req, res) => {
   }
 });
 
+router.post("/logout", authenticate, async (req, res) => {
+  try {
+    await prisma.user.update({
+      where: { id: req.user.userId }, // Ensure correct reference
+      data: { onlineStatus: false },
+    });
+
+    res.json({ message: "Logged out successfully." });
+  } catch (error) {
+    console.error("Logout error:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
+});
+
 // GET /auth/me - Returns the authenticated user's profile
-router.get("/me", authenticate, (req, res) => {
-  // The authenticate middleware attaches the user to req.user
-  res.json(req.user);
+router.get("/me", authenticate, async (req, res) => {
+  try {
+    const user = await prisma.user.findUnique({
+      where: { id: req.user.userId },
+      select: {
+        id: true,
+        empId: true,
+        email: true,
+        role: true,
+        companyId: true,
+        lastLogin: true,
+        onlineStatus: true,
+      },
+    });
+
+    if (!user) {
+      return res.status(404).json({ error: "User not found." });
+    }
+
+    res.json(user);
+  } catch (error) {
+    console.error("Auth me error:", error);
+    res.status(500).json({ error: "Internal server error." });
+  }
 });
 
 export default router;

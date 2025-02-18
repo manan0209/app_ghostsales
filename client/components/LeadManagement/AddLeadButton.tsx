@@ -1,9 +1,9 @@
-import type React from "react"
-import { Button } from "@/components/ui/button"
-import { Plus } from "lucide-react"
+import type React from "react";
+import { Button } from "@/components/ui/button";
+import { Plus } from "lucide-react";
 
 interface AddLeadButtonProps {
-  onClick: () => void
+  onClick: () => void;
 }
 
 const AddLeadButton: React.FC<AddLeadButtonProps> = ({ onClick }) => {
@@ -14,8 +14,7 @@ const AddLeadButton: React.FC<AddLeadButtonProps> = ({ onClick }) => {
     >
       <Plus className="h-6 w-6" />
     </Button>
-  )
-}
+  );
+};
 
-export default AddLeadButton
-
+export default AddLeadButton;

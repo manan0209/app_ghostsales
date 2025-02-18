@@ -1,19 +1,34 @@
-import type React from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { MessageSquare } from "lucide-react"
+import type React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import { MessageSquare } from "lucide-react";
 
 interface Feedback {
-  id: string
-  customerName: string
-  message: string
-  date: string
+  id: string;
+  customerName: string;
+  message: string;
+  date: string;
 }
 
 const feedbacks: Feedback[] = [
-  { id: "1", customerName: "Alice Brown", message: "Great product, but could use more features.", date: "2023-07-15" },
-  { id: "2", customerName: "Charlie Davis", message: "Customer support was very helpful!", date: "2023-07-14" },
-  { id: "3", customerName: "Eva Green", message: "Having issues with the latest update.", date: "2023-07-13" },
-]
+  {
+    id: "1",
+    customerName: "Alice Brown",
+    message: "Great product, but could use more features.",
+    date: "2023-07-15",
+  },
+  {
+    id: "2",
+    customerName: "Charlie Davis",
+    message: "Customer support was very helpful!",
+    date: "2023-07-14",
+  },
+  {
+    id: "3",
+    customerName: "Eva Green",
+    message: "Having issues with the latest update.",
+    date: "2023-07-13",
+  },
+];
 
 const FeedbackSystem: React.FC = () => {
   return (
@@ -29,7 +44,9 @@ const FeedbackSystem: React.FC = () => {
           {feedbacks.map((feedback) => (
             <li key={feedback.id} className="bg-gray-700 p-4 rounded-lg">
               <div className="flex justify-between items-center mb-2">
-                <span className="text-white font-semibold">{feedback.customerName}</span>
+                <span className="text-white font-semibold">
+                  {feedback.customerName}
+                </span>
                 <span className="text-gray-400 text-sm">{feedback.date}</span>
               </div>
               <p className="text-gray-300 text-sm">{feedback.message}</p>
@@ -38,8 +55,7 @@ const FeedbackSystem: React.FC = () => {
         </ul>
       </CardContent>
     </Card>
-  )
-}
+  );
+};
 
-export default FeedbackSystem
-
+export default FeedbackSystem;

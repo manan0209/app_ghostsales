@@ -1,45 +1,49 @@
 "use client";
+import type React from "react";
+import { useState, useEffect } from "react";
+import { motion, AnimatePresence } from "framer-motion";
+import { useDashboard } from "../contexts/DashboardContext";
 import { Button } from "@/components/ui/button";
-import { AnimatePresence, motion } from "framer-motion";
 import {
-  BarChart2,
-  Bot,
+  LayoutDashboard,
+  Users,
+  GitBranch,
+  Megaphone,
+  UserCircle,
+  Settings,
   ChevronLeft,
   ChevronRight,
-  GitBranch,
-  HelpCircle,
-  LayoutDashboard,
-  Megaphone,
-  PieChart,
-  Settings,
-  UserCircle,
-  Users,
+  CalendarCheck,
+  Bot,
+  BarChart2,
+  ClipboardList,
   Zap,
+  HelpCircle,
+  Menu,
+  PieChart,
+  X,
+  UsersIcon,
+  HeartHandshake,
+  TrendingUp,
+  Plug,
 } from "lucide-react";
-import type React from "react";
-import { useEffect, useState } from "react";
-import { useDashboard } from "../contexts/DashboardContext";
+import { ScrollArea } from "@/components/ui/scroll-area";
 
-const Sidebar: React.FC = () => {
-  const {
-    activePage,
-    setActivePage,
-    userRole,
-    isMobileMenuOpen,
-    setIsMobileMenuOpen,
-  } = useDashboard();
-  const [isCollapsed, setIsCollapsed] = useState(true);
-  const isMobile = typeof window !== "undefined" && window.innerWidth < 768;
+const Sidebar: React.FC<{
+  isMobileMenuOpen: boolean;
+  setIsMobileMenuOpen: React.Dispatch<React.SetStateAction<boolean>>;
+}> = ({ isMobileMenuOpen, setIsMobileMenuOpen }) => {
+  const { activePage, setActivePage, userRole } = useDashboard();
+  const isMobile = window.innerWidth < 768;
+  const [isCollapsed, setIsCollapsed] = useState(false);
 
   useEffect(() => {
     const handleResize = () => {
       if (window.innerWidth >= 768) {
         setIsMobileMenuOpen(false);
-        setIsCollapsed(false);
       }
     };
 
-    handleResize();
     window.addEventListener("resize", handleResize);
     return () => window.removeEventListener("resize", handleResize);
   }, [setIsMobileMenuOpen]);
@@ -55,25 +59,31 @@ const Sidebar: React.FC = () => {
       name: "Leads",
       icon: Users,
       page: "leads" as const,
-      roles: ["admin", "manager", "agent"],
+      roles: ["manager", "agent"],
     },
     {
       name: "Pipeline",
       icon: GitBranch,
       page: "pipeline" as const,
-      roles: ["admin", "manager", "agent"],
+      roles: ["manager", "agent"],
     },
     {
       name: "Campaigns",
       icon: Megaphone,
       page: "campaigns" as const,
-      roles: ["admin", "manager"],
+      roles: ["manager"],
     },
     {
       name: "Customer Retention",
-      icon: Users,
+      icon: HeartHandshake,
       page: "customer-retention" as const,
       roles: ["admin", "manager"],
+    },
+    {
+      name: "Teams",
+      icon: UsersIcon,
+      page: "teams" as const,
+      roles: ["admin", "manager", "agent"],
     },
     {
       name: "Users",
@@ -94,6 +104,12 @@ const Sidebar: React.FC = () => {
       roles: ["admin", "manager"],
     },
     {
+      name: "Reports",
+      icon: ClipboardList,
+      page: "reports" as const,
+      roles: ["admin", "manager"],
+    },
+    {
       name: "Performance",
       icon: BarChart2,
       page: "performance" as const,
@@ -104,6 +120,24 @@ const Sidebar: React.FC = () => {
       icon: PieChart,
       page: "analytics" as const,
       roles: ["admin", "manager"],
+    },
+    {
+      name: "Calendar",
+      icon: CalendarCheck,
+      page: "calendar" as const,
+      roles: ["admin", "manager", "agent"],
+    },
+    {
+      name: "Forecasting",
+      icon: TrendingUp,
+      page: "forecasting" as const,
+      roles: ["admin", "manager"],
+    },
+    {
+      name: "Integration",
+      icon: Plug,
+      page: "integration" as const,
+      roles: ["admin"],
     },
     {
       name: "FAQ & Training",
@@ -176,7 +210,7 @@ const Sidebar: React.FC = () => {
             <nav className="flex-grow">
               <ul className="space-y-1">
                 {navItems.map((item) => {
-                  if (!item.roles.includes(userRole)) return null;
+                  if (userRole && !item.roles.includes(userRole)) return null;
                   return (
                     <li key={item.name}>
                       <Button

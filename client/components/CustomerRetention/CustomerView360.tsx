@@ -1,6 +1,13 @@
-import type React from "react"
-import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card"
-import { Table, TableBody, TableCell, TableHead, TableHeader, TableRow } from "@/components/ui/table"
+import type React from "react";
+import { Card, CardContent, CardHeader, CardTitle } from "@/components/ui/card";
+import {
+  Table,
+  TableBody,
+  TableCell,
+  TableHead,
+  TableHeader,
+  TableRow,
+} from "@/components/ui/table";
 
 const customerData = {
   name: "John Doe",
@@ -11,18 +18,32 @@ const customerData = {
   lastPurchase: "2023-07-15",
   preferredProducts: ["Product A", "Product B", "Product C"],
   interactions: [
-    { date: "2023-07-10", type: "Email", description: "Responded to promotional offer" },
-    { date: "2023-06-25", type: "Phone", description: "Inquired about new product line" },
-    { date: "2023-06-15", type: "Website", description: "Viewed Product A details page" },
+    {
+      date: "2023-07-10",
+      type: "Email",
+      description: "Responded to promotional offer",
+    },
+    {
+      date: "2023-06-25",
+      type: "Phone",
+      description: "Inquired about new product line",
+    },
+    {
+      date: "2023-06-15",
+      type: "Website",
+      description: "Viewed Product A details page",
+    },
   ],
-}
+};
 
 const CustomerView360: React.FC = () => {
   return (
     <div className="space-y-6">
       <Card className="bg-gray-800 border-gray-700">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-white">Customer Profile</CardTitle>
+          <CardTitle className="text-xl font-semibold text-white">
+            Customer Profile
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <div className="grid grid-cols-2 gap-4">
@@ -56,7 +77,9 @@ const CustomerView360: React.FC = () => {
 
       <Card className="bg-gray-800 border-gray-700">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-white">Preferred Products</CardTitle>
+          <CardTitle className="text-xl font-semibold text-white">
+            Preferred Products
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <ul className="list-disc pl-5">
@@ -71,7 +94,9 @@ const CustomerView360: React.FC = () => {
 
       <Card className="bg-gray-800 border-gray-700">
         <CardHeader>
-          <CardTitle className="text-xl font-semibold text-white">Recent Interactions</CardTitle>
+          <CardTitle className="text-xl font-semibold text-white">
+            Recent Interactions
+          </CardTitle>
         </CardHeader>
         <CardContent>
           <Table>
@@ -85,9 +110,15 @@ const CustomerView360: React.FC = () => {
             <TableBody>
               {customerData.interactions.map((interaction, index) => (
                 <TableRow key={index}>
-                  <TableCell className="text-white">{interaction.date}</TableCell>
-                  <TableCell className="text-white">{interaction.type}</TableCell>
-                  <TableCell className="text-white">{interaction.description}</TableCell>
+                  <TableCell className="text-white">
+                    {interaction.date}
+                  </TableCell>
+                  <TableCell className="text-white">
+                    {interaction.type}
+                  </TableCell>
+                  <TableCell className="text-white">
+                    {interaction.description}
+                  </TableCell>
                 </TableRow>
               ))}
             </TableBody>
@@ -95,8 +126,7 @@ const CustomerView360: React.FC = () => {
         </CardContent>
       </Card>
     </div>
-  )
-}
+  );
+};
 
-export default CustomerView360
-
+export default CustomerView360;

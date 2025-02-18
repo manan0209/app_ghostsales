@@ -22,11 +22,12 @@ import {
 import { deleteUser } from "@/services/userManagement";
 
 interface User {
+  team: string;
   id: string;
   empId: string;
   name: string;
   email: string;
-  role: "admin" | "manager" | "agent" | "user";
+  role: "admin" | "manager" | "agent";
   lastLogin?: string;
   status?: "Active" | "Inactive";
 }
@@ -55,16 +56,35 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, refreshUsers }) => {
           <TableHead className="text-white">Name</TableHead>
           <TableHead className="text-white">Email</TableHead>
           <TableHead className="text-white">Role</TableHead>
+          <TableHead className="text-white">Team</TableHead>
+          <TableHead className="text-white">Last Login</TableHead>
+          <TableHead className="text-white">Status</TableHead>
           <TableHead className="text-white">Actions</TableHead>
         </TableRow>
       </TableHeader>
       <TableBody>
         {users.map((user) => (
           <TableRow key={user.id}>
-            <TableCell className="font-medium text-white">{user.empId}</TableCell>
-            <TableCell className="font-medium text-white">{user.name}</TableCell>
+            <TableCell className="font-medium text-white">
+              {user.empId}
+            </TableCell>
+            <TableCell className="font-medium text-white">
+              {user.name}
+            </TableCell>
             <TableCell className="text-gray-300">{user.email}</TableCell>
             <TableCell className="text-gray-300">{user.role}</TableCell>
+            <TableCell className="text-gray-300">{user.team}</TableCell>
+            <TableCell className="text-gray-300">{user.lastLogin}</TableCell>
+            <TableCell>
+              <Badge
+                variant={user.status === "Active" ? "default" : "secondary"}
+                className={
+                  user.status === "Active" ? "bg-green-500" : "bg-gray-500"
+                }
+              >
+                {user.status}
+              </Badge>
+            </TableCell>
             <TableCell>
               <DropdownMenu>
                 <DropdownMenuTrigger asChild>
@@ -73,7 +93,10 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, refreshUsers }) => {
                     <MoreHorizontal className="h-4 w-4" />
                   </Button>
                 </DropdownMenuTrigger>
-                <DropdownMenuContent align="end" className="bg-gray-800 text-white">
+                <DropdownMenuContent
+                  align="end"
+                  className="bg-gray-800 text-white"
+                >
                   <DropdownMenuLabel>Actions</DropdownMenuLabel>
                   <DropdownMenuSeparator />
                   <DropdownMenuItem className="cursor-pointer">
@@ -86,7 +109,8 @@ const UsersTable: React.FC<UsersTableProps> = ({ users, refreshUsers }) => {
                   >
                     <UserX className="mr-2 h-4 w-4" />
                     <span>
-                      {user.status === "Active" ? "Deactivate" : "Activate"} User
+                      {user.status === "Active" ? "Deactivate" : "Activate"}{" "}
+                      User
                     </span>
                   </DropdownMenuItem>
                 </DropdownMenuContent>

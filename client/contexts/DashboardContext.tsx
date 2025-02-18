@@ -8,16 +8,20 @@ type Page =
   | "leads"
   | "pipeline"
   | "campaigns"
+  | "customer-retention"
+  | "teams"
   | "users"
-  | "settings"
   | "ai-automation"
   | "task-automation"
+  | "reports"
   | "performance"
+  | "analytics"
+  | "calendar"
+  | "forecasting"
+  | "integration"
   | "faq"
-  | "customer-retention"
-  | "analytics";
-  export type Role = "admin" | "manager" | "agent"| null;
-
+  | "settings";
+export type Role = "admin" | "manager" | "agent" | null;
 
 interface DashboardContextType {
   activePage: Page;
@@ -47,17 +51,17 @@ export const DashboardProvider: React.FC<{ children: React.ReactNode }> = ({
 
   return (
     <DashboardContext.Provider
-      value={{ 
-        activePage, 
-        setActivePage, 
-        userRole, 
-        setUserRole, 
-        isSidebarOpen, 
+      value={{
+        activePage,
+        setActivePage,
+        userRole,
+        setUserRole,
+        isSidebarOpen,
         setIsSidebarOpen,
         isMobileMenuOpen,
         setIsMobileMenuOpen,
         isCollapsed,
-        setIsCollapsed
+        setIsCollapsed,
       }}
     >
       {children}
